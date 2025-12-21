@@ -1,0 +1,17 @@
+version = 0.1
+
+[default.global.parameters]
+stack_name = "Xlya-Dev"
+region = "us-east-1"
+
+[default.build.parameters]
+use_container = false
+parallel = true
+cached = true
+
+[default.deploy.parameters]
+s3_prefix = "xlya-resources"
+capabilities = ["CAPABILITY_AUTO_EXPAND","CAPABILITY_NAMED_IAM","CAPABILITY_IAM"]
+confirm_changeset = true
+fail_on_empty_changeset = false
+image_repositories = []

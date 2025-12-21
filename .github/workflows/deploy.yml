@@ -1,0 +1,52 @@
+name: Xlya-Dev
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: Build & Deploy Xlya SAM App
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install Latest AWS SAM CLI
+        run: |
+          pip install --upgrade aws-sam-cli
+          sam --version
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::252049260176:role/CICD-SAM-Xlya
+          aws-region: us-east-1
+
+      - name: Build SAM application
+        working-directory: ./Xlya
+        run: sam build --template-file template.yaml --parallel
+
+      - name: Deploy SAM application
+        working-directory: ./Xlya
+        run: sam deploy --template-file template.yaml --resolve-s3 --no-confirm-changeset --no-fail-on-empty-changeset
+
+    #   - name: Deploy Rest API Endpoints
+    #     run: |
+    #       REST_API_NAME="cammi-endpoints"
+    #       REGION="us-east-1"
+    #       REST_API_ID="3gd0sb22ah"
+    #       echo "Deploying REST API: $REST_API_ID"
+    #       aws apigateway create-deployment \
+    #         --rest-api-id $REST_API_ID \
+    #         --region $REGION \
+    #         --stage-name dev
