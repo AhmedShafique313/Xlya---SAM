@@ -1,24 +1,25 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Xlya SAM Root Template
-
 Resources:
   CognitoStack:
     Type: AWS::Serverless::Application
     Properties:
-      Location: cognito/template.yaml
-
+      Location: CognitoStack\template.yaml
+    Metadata:
+      SamResourceId: CognitoStack
   DynamoDBStack:
     Type: AWS::Serverless::Application
     Properties:
-      Location: dynamodb/template.yaml
-
-
+      Location: DynamoDBStack\template.yaml
+    Metadata:
+      SamResourceId: DynamoDBStack
 Outputs:
   CognitoStackOutput:
     Description: Outputs from cognito stack
-    Value: !Ref CognitoStack
-
+    Value:
+      Ref: CognitoStack
   DynamoDBStackOutput:
     Description: Outputs from dynamodb stack
-    Value: !Ref DynamoDBStack
+    Value:
+      Ref: DynamoDBStack

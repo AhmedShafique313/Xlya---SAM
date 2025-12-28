@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Xlya Cognito User Pool
+Resources:
+  XlyaUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: xlya-user-pool
+      UsernameAttributes:
+      - email
+      AutoVerifiedAttributes:
+      - email
+      Schema:
+      - Name: email
+        Required: true
+        Mutable: true
+      - Name: first_name
+        AttributeDataType: String
+        Mutable: true
+      - Name: last_name
+        AttributeDataType: String
+        Mutable: true
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: false
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+        - Name: verified_email
+          Priority: 1
+  XlyaUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: xlya-user-pool-client
+      UserPoolId:
+        Ref: XlyaUserPool
+      GenerateSecret: false
+      ExplicitAuthFlows:
+      - ALLOW_USER_PASSWORD_AUTH
+      - ALLOW_REFRESH_TOKEN_AUTH
+      - ALLOW_USER_SRP_AUTH
+      - ALLOW_ADMIN_USER_PASSWORD_AUTH
+      PreventUserExistenceErrors: ENABLED
+      SupportedIdentityProviders:
+      - COGNITO
+Outputs:
+  UserPoolId:
+    Value:
+      Ref: XlyaUserPool
+    Export:
+      Name: Xlya-UserPoolId
+  UserPoolClientId:
+    Value:
+      Ref: XlyaUserPoolClient
+    Export:
+      Name: Xlya-UserPoolClientId

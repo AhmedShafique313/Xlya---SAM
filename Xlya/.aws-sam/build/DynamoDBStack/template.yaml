@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Xlya DynamoDB Structure
+Resources:
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: users-table
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+      - AttributeName: cognito_sub
+        AttributeType: S
+      KeySchema:
+      - AttributeName: cognito_sub
+        KeyType: HASH
+Outputs:
+  UsersTableName:
+    Value:
+      Ref: UsersTable
+    Export:
+      Name: Xlya-UsersTableName
