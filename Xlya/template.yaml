@@ -3,6 +3,11 @@ Transform: AWS::Serverless-2016-10-31
 Description: Xlya SAM Root Template
 
 Resources:
+  IAMStack:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: IAM/template.yaml
+
   CognitoStack:
     Type: AWS::Serverless::Application
     Properties:
@@ -13,8 +18,17 @@ Resources:
     Properties:
       Location: dynamodb/template.yaml
 
+  AuthFeature:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: auth/template.yaml
+
 
 Outputs:
+  IAMStackOutput:
+    Description: Outputs from IAM stack
+    Value: !Ref IAMStack
+
   CognitoStackOutput:
     Description: Outputs from cognito stack
     Value: !Ref CognitoStack
@@ -22,3 +36,7 @@ Outputs:
   DynamoDBStackOutput:
     Description: Outputs from dynamodb stack
     Value: !Ref DynamoDBStack
+
+  AuthFeatureOutput:
+    Description: Outputs from Auth AuthFeature
+    Value: !Ref AuthFeature

@@ -13,6 +13,9 @@ Resources:
       AutoVerifiedAttributes:
         - email
 
+      LambdaConfig:
+        PostConfirmation: !ImportValue UserSyncFunctionArn
+
       Schema:
         - Name: email
           Required: true
@@ -38,6 +41,14 @@ Resources:
         RecoveryMechanisms:
           - Name: verified_email
             Priority: 1
+
+  CognitoInvokeUserSyncLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !ImportValue UserSyncFunctionArn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt XlyaUserPool.Arn
 
   XlyaUserPoolClient:
     Type: AWS::Cognito::UserPoolClient

@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Xlya Shared Lambda Execution Role (Full Access)
+
+Resources:
+  XlyaLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: xlya-lambda-execution-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonCognitoPowerUser
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+        - arn:aws:iam::aws:policy/AWSStepFunctionsFullAccess
+        - arn:aws:iam::aws:policy/AmazonEventBridgeSchedulerFullAccess
+
+Outputs:
+  XlyaLambdaExecutionRoleArn:
+    Description: Shared execution role for all Xlya Lambda functions
+    Value: !GetAtt XlyaLambdaExecutionRole.Arn
+    Export:
+      Name: Xlya-LambdaExecutionRoleArn

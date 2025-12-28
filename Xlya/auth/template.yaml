@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Auth feature for CAMMI - handles cognito users-sync
+
+Resources:
+  UserSyncFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: user-sync
+      Handler: app.lambda_handler
+      CodeUri: src/user-sync/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 128
+      Description: Sync Cognito user to DynamoDB users-table
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Environment:
+        Variables:
+          USERS_TABLE: !ImportValue Xlya-UsersTableName
+
+Outputs:
+  UserSyncFunctionArn:
+    Description: "Arn of user sync Function"
+    Value: !GetAtt UserSyncFunction.Arn
+    Export:
+      Name: UserSyncFunctionArn
