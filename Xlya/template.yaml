@@ -25,8 +25,8 @@ Resources:
 
   CognitoStack:
     Type: AWS::Serverless::Application
-    DependsOn:
-      - AuthFeature
+    # DependsOn:
+    #   - AuthFeature
     Properties:
       Location: cognito/template.yaml
 
