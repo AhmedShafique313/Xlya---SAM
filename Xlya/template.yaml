@@ -38,6 +38,14 @@ Resources:
     Properties:
       Location: onboarding/template.yaml
 
+  ApiGatewayFeature:
+    Type: AWS::Serverless::Application
+    DependsOn:
+      - IAMStack
+      - OnboardingFeature
+    Properties:
+      Location: api/template.yaml
+
 
 Outputs:
   IAMStackOutput:
@@ -59,3 +67,7 @@ Outputs:
   OnboardingFeatureOutput:
     Description: Outputs from Onboarding Feature
     Value: !Ref OnboardingFeature
+
+  ApiGatewayFeatureOutput:
+    Description: Outputs from API Gateway feature
+    Value: !Ref ApiGatewayFeature
