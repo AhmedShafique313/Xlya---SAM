@@ -15,8 +15,29 @@ Resources:
         - AttributeName: cognito_sub
           KeyType: HASH
 
+  OnboardingQuestionaireTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: users-onboarding-questionaire-table
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: cognito_sub
+          AttributeType: S
+        - AttributeName: user_type
+          AttributeType: S
+      KeySchema:
+        - AttributeName: cognito_sub
+          KeyType: HASH
+        - AttributeName: user_type
+          KeyType: RANGE
+
 Outputs:
   UsersTableName:
     Value: !Ref UsersTable
     Export:
       Name: Xlya-UsersTableName
+
+  OnboardingQuestionaireTableName:
+    Value: !Ref OnboardingQuestionaireTable
+    Export:
+      Name: Xlya-OnboardingQuestionaireTableName

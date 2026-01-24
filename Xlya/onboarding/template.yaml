@@ -18,6 +18,7 @@ Resources:
       Environment:
         Variables:
           USERS_TABLE: !ImportValue Xlya-UsersTableName
+          ONBOARDING_TABLE: !ImportValue Xlya-OnboardingQuestionaireTableName
 
 Outputs:
   OnboardingQuestionsFunctionArn:
