@@ -1,0 +1,90 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: API Template for Xlya
+
+Resources:
+  xlya:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: xlya-endpoints
+
+  RestAPIDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - Onboarding
+    Properties:
+      RestApiId: !Ref xlya
+
+  ApiLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/apigateway/XlyaRestApiLogGroup
+      RetentionInDays: 30
+
+  ApiGatewayStage:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      DeploymentId: !Ref RestAPIDeployment
+      RestApiId: !Ref xlya
+      StageName: dev
+      TracingEnabled: true
+      MethodSettings:
+        - ResourcePath: "/*"
+          HttpMethod: "*"
+          DataTraceEnabled: true
+          LoggingLevel: INFO
+      AccessLogSetting:
+        DestinationArn: !GetAtt ApiLogGroup.Arn
+        Format: '{
+            "request_id": "$context.requestId",
+            "extended_request_id": "$context.extendedRequestId",
+            "source_ip": "$context.identity.sourceIp",
+            "caller": "$context.identity.caller",
+            "user": "$context.identity.user",
+            "request_time": "$context.requestTime",
+            "http_method": "$context.httpMethod",
+            "resource_path": "$context.resourcePath",
+            "protocol": "$context.protocol",
+            "status_code": "$context.status",
+            "response_length": "$context.responseLength",
+            "body": "$input.body",
+            "params": "$input.params",
+            "context_error_message": "$context.error.message",
+            "integration_latency": "$context.integrationLatency",
+            "response_latency": "$context.responseLatency"
+          }'
+
+  ApiLoggingRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: Allows the API to log errors to CloudWatch Logs
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+
+  ApiGatewayAccount:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn: !GetAtt ApiLoggingRole.Arn
+
+  Onboarding:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: onboarding.yaml
+      Parameters:
+        RootResourceId: !GetAtt xlya.RootResourceId
+        RestApiId: !Ref xlya
+
+Outputs:
+  XlyaApiId:
+    Description: Xlya API ID
+    Value: !Ref xlya

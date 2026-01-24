@@ -28,9 +28,42 @@ Resources:
         - arn:aws:iam::aws:policy/AWSStepFunctionsFullAccess
         - arn:aws:iam::aws:policy/AmazonEventBridgeSchedulerFullAccess
 
+  ApiGatewayFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+
+  ApiGatewayFunctionPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: XlyaApiGatewayFunctionPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: "lambda:*"
+            Resource: "*"
+      Roles:
+        - !Ref ApiGatewayFunctionRole
+
 Outputs:
   XlyaLambdaExecutionRoleArn:
     Description: Shared execution role for all Xlya Lambda functions
     Value: !GetAtt XlyaLambdaExecutionRole.Arn
     Export:
       Name: Xlya-LambdaExecutionRoleArn
+
+  ApiGatewayFunctionRoleArn:
+    Description: "ARN of the API Gateway Lambda Invoke Role"
+    Value: !GetAtt ApiGatewayFunctionRole.Arn
+    Export:
+      Name: Xlya-ApiGatewayFunctionRoleArn
