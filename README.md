@@ -14,4 +14,7 @@ xlya-sam/
 │   └── template.yaml             # users-table
 │
 └── iam/
-    └── template.yaml             # IAM Role & Policies
+|  └── template.yaml             # IAM Role & Policies
+|
+|__ auth/
+   |__ template.yaml

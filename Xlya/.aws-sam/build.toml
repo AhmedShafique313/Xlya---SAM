@@ -9,4 +9,13 @@ manifest_hash = ""
 packagetype = "Zip"
 functions = ["AuthFeature/UserSyncFunction"]
 
+[function_build_definitions.a2b1baa7-7dfd-40bd-adb6-25aa9944a6c7]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\onboarding\\src\\questionaire"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["OnboardingFeature/OnboardingQuestionsFunction"]
+
 [layer_build_definitions]

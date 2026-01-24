@@ -30,6 +30,14 @@ Resources:
     Properties:
       Location: cognito/template.yaml
 
+  OnboardingFeature:
+    Type: AWS::Serverless::Application
+    DependsOn:
+      - IAMStack
+      - DynamoDBStack
+    Properties:
+      Location: onboarding/template.yaml
+
 
 Outputs:
   IAMStackOutput:
@@ -47,3 +55,7 @@ Outputs:
   CognitoStackOutput:
     Description: Outputs from cognito stack
     Value: !Ref CognitoStack
+
+  OnboardingFeatureOutput:
+    Description: Outputs from Onboarding Feature
+    Value: !Ref OnboardingFeature

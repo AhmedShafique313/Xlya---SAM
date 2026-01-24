@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Onboarding feature for Xlya - handles user-Onboarding questionaire
+
+Resources:
+  OnboardingQuestionsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: questionaire
+      Handler: app.lambda_handler
+      CodeUri: src/questionaire/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 128
+      Description: handles user Onboarding questionaire session
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Environment:
+        Variables:
+          USERS_TABLE: !ImportValue Xlya-UsersTableName
+
+Outputs:
+  OnboardingQuestionsFunctionArn:
+    Description: "Arn of users onboarding questionaire Function"
+    Value: !GetAtt OnboardingQuestionsFunction.Arn
+    Export:
+      Name: OnboardingQuestionsFunctionArn
