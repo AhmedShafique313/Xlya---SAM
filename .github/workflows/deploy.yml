@@ -40,13 +40,13 @@ jobs:
         working-directory: ./Xlya
         run: sam deploy --template-file template.yaml --resolve-s3 --no-confirm-changeset --no-fail-on-empty-changeset
 
-    #   - name: Deploy Rest API Endpoints
-    #     run: |
-    #       REST_API_NAME="cammi-endpoints"
-    #       REGION="us-east-1"
-    #       REST_API_ID="3gd0sb22ah"
-    #       echo "Deploying REST API: $REST_API_ID"
-    #       aws apigateway create-deployment \
-    #         --rest-api-id $REST_API_ID \
-    #         --region $REGION \
-    #         --stage-name dev
+      - name: Deploy Rest API Endpoints
+        run: |
+          REST_API_NAME="xlya-endpoints"
+          REGION="us-east-1"
+          REST_API_ID="7i953oipvl"
+          echo "Deploying REST API: $REST_API_ID"
+          aws apigateway create-deployment \
+            --rest-api-id $REST_API_ID \
+            --region $REGION \
+            --stage-name dev
