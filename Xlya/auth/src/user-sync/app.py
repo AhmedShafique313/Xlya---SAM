@@ -13,6 +13,7 @@ def handler(event, context):
         'first_name': user_attrs.get('custom:first_name', ''),
         'last_name': user_attrs.get('custom:last_name', ''),
         'user_status': 'ACTIVE',
+        'onboarding_status': True,
         'created_at': datetime.utcnow().isoformat()
     }
     table.put_item(Item=item)
