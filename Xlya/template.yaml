@@ -46,6 +46,13 @@ Resources:
     Properties:
       Location: api/template.yaml
 
+  ProfileFeature:
+    Type: AWS::Serverless::Application
+    DependsOn:
+      - IAMStack
+      - DynamoDBStack
+    Properties:
+      Location: profile/template.yaml
 
 Outputs:
   IAMStackOutput:
@@ -71,3 +78,7 @@ Outputs:
   ApiGatewayFeatureOutput:
     Description: Outputs from API Gateway feature
     Value: !Ref ApiGatewayFeature
+
+  ProfileFeatureOutput:
+    Description: Outputs from Profile Feature
+    Value: !Ref ProfileFeature

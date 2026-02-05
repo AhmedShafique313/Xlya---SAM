@@ -18,4 +18,13 @@ manifest_hash = ""
 packagetype = "Zip"
 functions = ["OnboardingFeature/OnboardingQuestionsFunction"]
 
+[function_build_definitions.126aa288-f9c9-4ba3-bd71-c9b10f6d6f2d]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\profile\\src\\personal-info"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["ProfileFeature/PersonalInfoFunction"]
+
 [layer_build_definitions]

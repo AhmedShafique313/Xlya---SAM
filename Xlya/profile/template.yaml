@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Profile feature for CAMMI - handles updation of personal information of users
+
+Resources:
+  PersonalInfoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: personal-info
+      Handler: app.lambda_handler
+      CodeUri: src/personal-info/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 128
+      Description: handles user personal information updation
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Environment:
+        Variables:
+          USERS_TABLE: !ImportValue Xlya-UsersTableName
+
+Outputs:
+  PersonalInfoFunctionArn:
+    Description: "Arn of personal info Function"
+    Value: !GetAtt PersonalInfoFunction.Arn
+    Export:
+      Name: PersonalInfoFunctionArn

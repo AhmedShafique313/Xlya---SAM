@@ -12,6 +12,7 @@ Resources:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
       - Onboarding
+      - Profile
     Properties:
       RestApiId: !Ref xlya
 
@@ -80,6 +81,14 @@ Resources:
     Type: AWS::Serverless::Application
     Properties:
       Location: onboarding.yaml
+      Parameters:
+        RootResourceId: !GetAtt xlya.RootResourceId
+        RestApiId: !Ref xlya
+
+  Profile:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: profile.yaml
       Parameters:
         RootResourceId: !GetAtt xlya.RootResourceId
         RestApiId: !Ref xlya
