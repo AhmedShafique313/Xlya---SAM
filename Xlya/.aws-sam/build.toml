@@ -27,4 +27,13 @@ manifest_hash = ""
 packagetype = "Zip"
 functions = ["ProfileFeature/PersonalInfoFunction"]
 
+[function_build_definitions.8742af84-5a87-4c77-b211-c2ba6d8b40b0]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\profile\\src\\profile-info"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["ProfileFeature/ProfileInfoFunction"]
+
 [layer_build_definitions]

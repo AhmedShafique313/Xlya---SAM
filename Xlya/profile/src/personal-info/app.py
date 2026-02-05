@@ -3,12 +3,13 @@ import boto3
 import base64
 from datetime import datetime
 from decimal import Decimal
+import os
 
 # ---------------------------
 # DynamoDB Setup
 # ---------------------------
-dynamodb = boto3.resource("dynamodb")
-table = dynamodb.Table("users-table")
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table(os.environ['USERS_TABLE'])  # Set this env variable in Lambda
 
 
 def lambda_handler(event, context):
@@ -19,38 +20,40 @@ def lambda_handler(event, context):
         return cors_response(200, {"message": "CORS preflight success"})
 
     # ---------------------------
-    # Get Cognito User (sub)
+    # Get Cognito Sub from Authorization Header (like onboarding Lambda)
     # ---------------------------
-    try:
-        cognito_sub = event["requestContext"]["authorizer"]["claims"]["sub"]
-    except KeyError:
-        return cors_response(
-            401,
-            {"message": "Unauthorized: Cognito user not found"}
-        )
+    headers = event.get("headers") or {}
+    auth_header = headers.get("Authorization") or headers.get("authorization")
+    if not auth_header:
+        return cors_response(401, {"message": "Unauthorized: Missing Authorization header"})
+
+    # Use the raw value from header directly (no strict Bearer check)
+    if auth_header.lower().startswith("bearer "):
+        cognito_sub = auth_header.split(" ", 1)[1]
+    else:
+        cognito_sub = auth_header
 
     # ---------------------------
-    # Parse Body
+    # Parse Body robustly
     # ---------------------------
     body = event.get("body") or "{}"
+
+    # If string, parse JSON; if dict, use as-is
     if isinstance(body, str):
-        body = json.loads(body)
+        try:
+            body = json.loads(body)
+        except json.JSONDecodeError:
+            return cors_response(400, {"message": "Invalid JSON body"})
+    elif not isinstance(body, dict):
+        return cors_response(400, {"message": "Invalid body format"})
 
     # ---------------------------
-    # Allowed Editable Fields
+    # Editable Fields
     # ---------------------------
     editable_fields = [
-        "first_name",
-        "last_name",
-        "email",
-        "image",               # base64 string
-        "dateofbirth",
-        "gender",
-        "country",
-        "address",
-        "phone_number",
-        "age",
-        "social_links"
+        "first_name", "last_name", "email", "image",
+        "dateofbirth", "gender", "country", "address",
+        "phone_number", "age", "social_links"
     ]
 
     update_expression = []
@@ -58,24 +61,21 @@ def lambda_handler(event, context):
     expression_values = {}
 
     # ---------------------------
-    # Normalize & Validate Age
+    # Normalize Age
     # ---------------------------
     if "age" in body:
-        body["age"] = int(body["age"])
+        try:
+            body["age"] = int(body["age"])
+        except ValueError:
+            return cors_response(400, {"message": "Age must be a number"})
 
     # ---------------------------
-    # Validate base64 image (if provided)
+    # Validate Base64 Image
     # ---------------------------
     if "image" in body:
         image_base64 = body["image"]
-
         if not is_valid_base64(image_base64):
-            return cors_response(
-                400,
-                {"message": "Invalid base64 image format"}
-            )
-
-        # Store exactly as received (string)
+            return cors_response(400, {"message": "Invalid base64 image format"})
         body["image"] = image_base64
 
     # ---------------------------
@@ -92,34 +92,30 @@ def lambda_handler(event, context):
     expression_names["#updated_at"] = "updated_at"
     expression_values[":updated_at"] = datetime.utcnow().isoformat()
 
-    # No valid fields check
     if len(update_expression) == 1:
-        return cors_response(
-            400,
-            {"message": "No valid profile fields provided"}
-        )
+        return cors_response(400, {"message": "No valid profile fields provided"})
 
     # ---------------------------
     # DynamoDB Update
     # ---------------------------
-    result = table.update_item(
-        Key={"cognito_sub": cognito_sub},
-        UpdateExpression="SET " + ", ".join(update_expression),
-        ExpressionAttributeNames=expression_names,
-        ExpressionAttributeValues=expression_values,
-        ReturnValues="UPDATED_NEW"
-    )
+    try:
+        result = table.update_item(
+            Key={"cognito_sub": cognito_sub},
+            UpdateExpression="SET " + ", ".join(update_expression),
+            ExpressionAttributeNames=expression_names,
+            ExpressionAttributeValues=expression_values,
+            ReturnValues="UPDATED_NEW"
+        )
+    except Exception as e:
+        return cors_response(500, {"message": "Failed to update user profile", "error": str(e)})
 
     # ---------------------------
     # Success Response
     # ---------------------------
-    return cors_response(
-        200,
-        {
-            "message": "User profile updated successfully",
-            "updated_fields": result.get("Attributes", {})
-        }
-    )
+    return cors_response(200, {
+        "message": "User profile updated successfully",
+        "updated_fields": result.get("Attributes", {})
+    })
 
 
 # ---------------------------
@@ -127,10 +123,8 @@ def lambda_handler(event, context):
 # ---------------------------
 def is_valid_base64(data):
     try:
-        # Remove data URL prefix if frontend sends it
         if data.startswith("data:image"):
             data = data.split(",")[1]
-
         base64.b64decode(data, validate=True)
         return True
     except Exception:

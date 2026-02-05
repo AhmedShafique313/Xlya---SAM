@@ -19,9 +19,31 @@ Resources:
         Variables:
           USERS_TABLE: !ImportValue Xlya-UsersTableName
 
+  ProfileInfoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: profile-info
+      Handler: app.lambda_handler
+      CodeUri: src/profile-info/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 128
+      Description: handles user profile information
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Environment:
+        Variables:
+          USERS_TABLE: !ImportValue Xlya-UsersTableName
+
 Outputs:
   PersonalInfoFunctionArn:
     Description: "Arn of personal info Function"
     Value: !GetAtt PersonalInfoFunction.Arn
     Export:
       Name: PersonalInfoFunctionArn
+
+  ProfileInfoFunctionArn:
+    Description: "Arn of profile info Function"
+    Value: !GetAtt ProfileInfoFunction.Arn
+    Export:
+      Name: ProfileInfoFunctionArn
