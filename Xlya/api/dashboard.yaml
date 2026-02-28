@@ -23,12 +23,12 @@ Resources:
       PathPart: intelligent
       RestApiId: !Ref RestApiId
 
-  IntelligentFunctionResourcePOSTMethod:
+  IntelligentFunctionResourceGETMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       RestApiId: !Ref RestApiId
       ResourceId: !Ref IntelligentFunctionResource
-      HttpMethod: POST
+      HttpMethod: GET
       AuthorizationType: NONE
       ApiKeyRequired: false
       Integration:
@@ -56,7 +56,7 @@ Resources:
           - StatusCode: 200
             ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             ResponseTemplates:
               application/json: "{}"

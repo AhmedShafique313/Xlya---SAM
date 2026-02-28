@@ -200,6 +200,7 @@ def lambda_handler(event, context):
         user_country = COUNTRY_NAME_TO_CODE.get(country_name, "US")
 
         first_name = user.get("first_name", "User")
+        first_name = first_name.strip().title()
 
     except Exception as e:
         return cors_response(500, {"message": f"DynamoDB Error: {str(e)}"})
