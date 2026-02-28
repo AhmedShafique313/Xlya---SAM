@@ -59,8 +59,14 @@ Resources:
     DependsOn:
       - IAMStack
       - DynamoDBStack
+      - LayersStack
     Properties:
       Location: dashboard/template.yaml
+
+  LayersStack:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: layers/template.yaml
 
 Outputs:
   IAMStackOutput:
@@ -94,3 +100,7 @@ Outputs:
   DashboardFeatureOutput:
     Description: Outputs from Dashboard Feature
     Value: !Ref DashboardFeature
+
+  LayersStackOutput:
+    Description: Outputs from layers stack
+    Value: !Ref LayersStack

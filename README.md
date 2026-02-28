@@ -18,3 +18,8 @@ xlya-sam/
 |
 |__ auth/
    |__ template.yaml
+
+
+### Docker Code
+
+docker run --rm -it --entrypoint /bin/sh -v "C:\Users\Islams Dream\Desktop\foldename:/var/task" public.ecr.aws/lambda/python:3.13 -c "python3.13 -m pip install --upgrade pip && python3.13 -m pip install requests google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2 tzdata groq -t /var/task/python"

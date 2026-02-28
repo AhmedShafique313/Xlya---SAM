@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Google OAuth and common libraries layer for CAMMI
+
+Resources:
+  IntelligentLibrariesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: intelligent-layer
+      Description: Shared dependencies for Google login, requests, cachecontrol, etc.
+      ContentUri: intelligent-layer.zip
+      CompatibleRuntimes:
+        - python3.13
+      RetentionPolicy: Delete
+
+Outputs:
+  IntelligentLibrariesLayerArn:
+    Description: ARN of the Google Libraries Layer
+    Value: !Ref IntelligentLibrariesLayer
+    Export:
+      Name: IntelligentLibrariesLayerArn
