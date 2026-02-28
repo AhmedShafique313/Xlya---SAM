@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: API Template for Xlya Dashboard
+
+Parameters:
+  RootResourceId:
+    Type: String
+  RestApiId:
+    Type: String
+
+Resources:
+  DashboardParentResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !Ref RootResourceId
+      PathPart: dashboard
+      RestApiId: !Ref RestApiId
+
+  IntelligentFunctionResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt DashboardParentResource.ResourceId
+      PathPart: intelligent
+      RestApiId: !Ref RestApiId
+
+  IntelligentFunctionResourcePOSTMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref RestApiId
+      ResourceId: !Ref IntelligentFunctionResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      ApiKeyRequired: false
+      Integration:
+        Credentials: !ImportValue Xlya-ApiGatewayFunctionRoleArn
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub
+          - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${IntelligentFunctionArn}/invocations
+          - IntelligentFunctionArn: !ImportValue IntelligentFunctionArn
+        PassthroughBehavior: WHEN_NO_TEMPLATES
+        TimeoutInMillis: 29000
+
+  IntelligentFunctionResourceOPTIONSMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref RestApiId
+      ResourceId: !Ref IntelligentFunctionResource
+      HttpMethod: OPTIONS
+      AuthorizationType: NONE
+      Integration:
+        Type: MOCK
+        RequestTemplates:
+          application/json: '{ "statusCode": 200 }'
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            ResponseTemplates:
+              application/json: "{}"
+      MethodResponses:
+        - StatusCode: 200
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true

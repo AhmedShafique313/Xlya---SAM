@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Dashboard feature for CAMMI - handles updation of personal information of users
+
+Resources:
+  IntelligentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: intelligent
+      Handler: app.lambda_handler
+      CodeUri: src/intelligent/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 128
+      Description: handles user personal time and message updation
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Environment:
+        Variables:
+          USERS_TABLE: !ImportValue Xlya-UsersTableName
+
+Outputs:
+  IntelligentFunctionArn:
+    Description: "Arn of intelligent info Function"
+    Value: !GetAtt IntelligentFunction.Arn
+    Export:
+      Name: IntelligentFunctionArn

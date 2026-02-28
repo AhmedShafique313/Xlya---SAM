@@ -13,6 +13,7 @@ Resources:
     DependsOn:
       - Onboarding
       - Profile
+      - Dashboard
     Properties:
       RestApiId: !Ref xlya
 
@@ -89,6 +90,14 @@ Resources:
     Type: AWS::Serverless::Application
     Properties:
       Location: profile.yaml
+      Parameters:
+        RootResourceId: !GetAtt xlya.RootResourceId
+        RestApiId: !Ref xlya
+
+  Dashboard:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: dashboard.yaml
       Parameters:
         RootResourceId: !GetAtt xlya.RootResourceId
         RestApiId: !Ref xlya

@@ -36,4 +36,13 @@ manifest_hash = ""
 packagetype = "Zip"
 functions = ["ProfileFeature/ProfileInfoFunction"]
 
+[function_build_definitions.527ab9f8-54f7-4061-b60f-319a8b5baf6f]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\dashboard\\src\\intelligent"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["DashboardFeature/IntelligentFunction"]
+
 [layer_build_definitions]

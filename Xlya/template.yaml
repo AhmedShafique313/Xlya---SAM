@@ -54,6 +54,14 @@ Resources:
     Properties:
       Location: profile/template.yaml
 
+  DashboardFeature:
+    Type: AWS::Serverless::Application
+    DependsOn:
+      - IAMStack
+      - DynamoDBStack
+    Properties:
+      Location: dashboard/template.yaml
+
 Outputs:
   IAMStackOutput:
     Description: Outputs from IAM stack
@@ -82,3 +90,7 @@ Outputs:
   ProfileFeatureOutput:
     Description: Outputs from Profile Feature
     Value: !Ref ProfileFeature
+
+  DashboardFeatureOutput:
+    Description: Outputs from Dashboard Feature
+    Value: !Ref DashboardFeature
