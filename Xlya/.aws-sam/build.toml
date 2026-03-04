@@ -45,4 +45,67 @@ manifest_hash = ""
 packagetype = "Zip"
 functions = ["DashboardFeature/IntelligentFunction"]
 
+[function_build_definitions.f8a29176-89ca-4104-b5eb-e42514a2d625]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\seo-aeo-geo-statemachine\\src\\orchestrator-seoaeogeo"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["SEOAEOGEOFeature/OrchestratorSEOAEOGEOFunction"]
+
+[function_build_definitions.9836e187-9e1f-4176-bbe3-e8cb6fdfe8f0]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\seo-aeo-geo-statemachine\\src\\crawler"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["SEOAEOGEOFeature/CrawlerFunction"]
+
+[function_build_definitions.8dbf152f-77cf-40b7-96df-b146bdce6aa2]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\seo-aeo-geo-statemachine\\src\\seo-analyzer"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["SEOAEOGEOFeature/SEOAnalyzerFunction"]
+
+[function_build_definitions.4a4129f8-29b4-491d-bc46-de606ad197af]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\seo-aeo-geo-statemachine\\src\\aeo-analyzer"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["SEOAEOGEOFeature/AEOAnalyzerFunction"]
+
+[function_build_definitions.e4ecb93a-eba4-4566-b84b-2ebb70234be1]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\seo-aeo-geo-statemachine\\src\\geo-analyzer"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["SEOAEOGEOFeature/GEOAnalyzerFunction"]
+
+[function_build_definitions.68a7acbc-e925-4175-993c-52c9a1cb5f3f]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\seo-aeo-geo-statemachine\\src\\competitor-analyzer"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["SEOAEOGEOFeature/CompetitorAnalyzerFunction"]
+
+[function_build_definitions.baed1e2a-8848-4cda-bfdb-d64bbac1f823]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\seo-aeo-geo-statemachine\\src\\scoring-seoaeogeo"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["SEOAEOGEOFeature/ScoringSEOAEOGEOFunction"]
+
 [layer_build_definitions]

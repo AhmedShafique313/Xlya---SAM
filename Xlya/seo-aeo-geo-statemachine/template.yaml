@@ -1,0 +1,166 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Profile feature for CAMMI - handles updation of personal information of users
+
+Resources:
+  OrchestratorSEOAEOGEOFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: orchestrator-seoaeogeo
+      Handler: app.lambda_handler
+      CodeUri: src/orchestrator-seoaeogeo/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 512
+      Description: handles SEOAEOGEO Orchestration
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Environment:
+        Variables:
+          USERS_TABLE: !ImportValue Xlya-UsersTableName
+          SEOAEOGEOANALYZERTABLE: !ImportValue Xlya-SEOAEOGEOAnalyzerTableName
+
+  CrawlerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: crawler
+      Handler: app.lambda_handler
+      CodeUri: src/crawler/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 512
+      Description: handles SEOAEOGEO Crawler
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Environment:
+        Variables:
+          USERS_TABLE: !ImportValue Xlya-UsersTableName
+          SEOAEOGEOANALYZERTABLE: !ImportValue Xlya-SEOAEOGEOAnalyzerTableName
+
+  SEOAnalyzerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: seo-analyzer
+      Handler: app.lambda_handler
+      CodeUri: src/seo-analyzer/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 512
+      Description: handles SEOAEOGEO analyzer
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Environment:
+        Variables:
+          USERS_TABLE: !ImportValue Xlya-UsersTableName
+          SEOAEOGEOANALYZERTABLE: !ImportValue Xlya-SEOAEOGEOAnalyzerTableName
+
+  AEOAnalyzerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: aeo-analyzer
+      Handler: app.lambda_handler
+      CodeUri: src/aeo-analyzer/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 512
+      Description: handles SEOAEOGEO analyzer
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Environment:
+        Variables:
+          USERS_TABLE: !ImportValue Xlya-UsersTableName
+          SEOAEOGEOANALYZERTABLE: !ImportValue Xlya-SEOAEOGEOAnalyzerTableName
+
+  GEOAnalyzerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: geo-analyzer
+      Handler: app.lambda_handler
+      CodeUri: src/geo-analyzer/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 512
+      Description: handles SEOAEOGEO analyzer
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Environment:
+        Variables:
+          USERS_TABLE: !ImportValue Xlya-UsersTableName
+          SEOAEOGEOANALYZERTABLE: !ImportValue Xlya-SEOAEOGEOAnalyzerTableName
+
+  CompetitorAnalyzerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: competitor-analyzer
+      Handler: app.lambda_handler
+      CodeUri: src/competitor-analyzer/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 512
+      Description: handles SEOAEOGEO analyzer
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Environment:
+        Variables:
+          USERS_TABLE: !ImportValue Xlya-UsersTableName
+          SEOAEOGEOANALYZERTABLE: !ImportValue Xlya-SEOAEOGEOAnalyzerTableName
+
+  ScoringSEOAEOGEOFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: scoring-seoaeogeo
+      Handler: app.lambda_handler
+      CodeUri: src/scoring-seoaeogeo/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 512
+      Description: handles SEOAEOGEO scoring
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Environment:
+        Variables:
+          USERS_TABLE: !ImportValue Xlya-UsersTableName
+          SEOAEOGEOANALYZERTABLE: !ImportValue Xlya-SEOAEOGEOAnalyzerTableName
+
+Outputs:
+  OrchestratorSEOAEOGEOFunctionArn:
+    Description: "Arn of seoaeogeo Function"
+    Value: !GetAtt OrchestratorSEOAEOGEOFunction.Arn
+    Export:
+      Name: OrchestratorSEOAEOGEOFunctionArn
+
+  CrawlerFunctionArn:
+    Description: "Arn of seoaeogeo Function"
+    Value: !GetAtt CrawlerFunction.Arn
+    Export:
+      Name: CrawlerFunctionArn
+
+  SEOAnalyzerFunctionArn:
+    Description: "Arn of seoaeogeo Function"
+    Value: !GetAtt SEOAnalyzerFunction.Arn
+    Export:
+      Name: SEOAnalyzerFunctionArn
+
+  AEOAnalyzerFunctionArn:
+    Description: "Arn of seoaeogeo Function"
+    Value: !GetAtt AEOAnalyzerFunction.Arn
+    Export:
+      Name: AEOAnalyzerFunctionArn
+
+  GEOAnalyzerFunctionArn:
+    Description: "Arn of seoaeogeo Function"
+    Value: !GetAtt GEOAnalyzerFunction.Arn
+    Export:
+      Name: GEOAnalyzerFunctionArn
+
+  CompetitorAnalyzerFunctionArn:
+    Description: "Arn of seoaeogeo Function"
+    Value: !GetAtt CompetitorAnalyzerFunction.Arn
+    Export:
+      Name: CompetitorAnalyzerFunctionArn
+
+  ScoringSEOAEOGEOFunctionArn:
+    Description: "Arn of seoaeogeo Function"
+    Value: !GetAtt ScoringSEOAEOGEOFunction.Arn
+    Export:
+      Name: ScoringSEOAEOGEOFunctionArn

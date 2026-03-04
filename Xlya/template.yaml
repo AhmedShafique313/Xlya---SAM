@@ -68,6 +68,15 @@ Resources:
     Properties:
       Location: layers/template.yaml
 
+  SEOAEOGEOFeature:
+    Type: AWS::Serverless::Application
+    DependsOn:
+      - IAMStack
+      - DynamoDBStack
+      - LayersStack
+    Properties:
+      Location: seo-aeo-geo-statemachine/template.yaml
+
 Outputs:
   IAMStackOutput:
     Description: Outputs from IAM stack
@@ -104,3 +113,7 @@ Outputs:
   LayersStackOutput:
     Description: Outputs from layers stack
     Value: !Ref LayersStack
+
+  SEOAEOGEOFeatureOutput:
+    Description: Outputs from SEOAEOGEO feature
+    Value: !Ref SEOAEOGEOFeature

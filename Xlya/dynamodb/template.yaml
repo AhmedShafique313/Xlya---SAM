@@ -41,6 +41,8 @@ Resources:
           AttributeType: S
         - AttributeName: cognito_sub
           AttributeType: S
+        - AttributeName: created_at
+          AttributeType: S
       KeySchema:
         - AttributeName: task_id
           KeyType: HASH
