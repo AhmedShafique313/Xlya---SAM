@@ -74,8 +74,16 @@ Resources:
       - IAMStack
       - DynamoDBStack
       - LayersStack
+      - S3Stack
     Properties:
       Location: seo-aeo-geo-statemachine/template.yaml
+      Parameters:
+        S3BucketName: !GetAtt S3Stack.Outputs.XlyaBucketName
+
+  S3Stack:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: s3/template.yaml
 
 Outputs:
   IAMStackOutput:
@@ -117,3 +125,7 @@ Outputs:
   SEOAEOGEOFeatureOutput:
     Description: Outputs from SEOAEOGEO feature
     Value: !Ref SEOAEOGEOFeature
+
+  S3StackOutput:
+    Description: Outputs from S3 stack
+    Value: !Ref S3Stack
