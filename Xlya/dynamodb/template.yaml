@@ -31,6 +31,31 @@ Resources:
         - AttributeName: user_type
           KeyType: RANGE
 
+  SEOAEOGEOAnalyzerTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: seo-aeo-geo-analyzer-table
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: task_id
+          AttributeType: S
+        - AttributeName: cognito_sub
+          AttributeType: S
+      KeySchema:
+        - AttributeName: task_id
+          KeyType: HASH
+        - AttributeName: cognito_sub
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: cognito_sub-index
+          KeySchema:
+            - AttributeName: cognito_sub
+              KeyType: HASH
+            - AttributeName: created_at
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
 Outputs:
   UsersTableName:
     Value: !Ref UsersTable
@@ -41,3 +66,8 @@ Outputs:
     Value: !Ref OnboardingQuestionaireTable
     Export:
       Name: Xlya-OnboardingQuestionaireTableName
+
+  SEOAEOGEOAnalyzerTableName:
+    Value: !Ref SEOAEOGEOAnalyzerTable
+    Export:
+      Name: Xlya-SEOAEOGEOAnalyzerTableName
