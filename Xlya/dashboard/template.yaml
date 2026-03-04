@@ -12,7 +12,7 @@ Resources:
       Runtime: python3.13
       Tracing: Active
       Timeout: 900
-      MemorySize: 10240
+      MemorySize: 1024
       Description: handles user personal time and message updation
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
       Layers:
