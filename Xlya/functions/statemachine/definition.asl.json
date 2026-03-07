@@ -4,7 +4,7 @@
     "States": {
         "CrawlWebsite": {
             "Type": "Task",
-            "Resource": "${CrawlerFunctionArn}",
+            "Resource": "${CrawlerLambda}",
             "Comment": "Step 1: Crawl the target website using Firecrawl API",
             "InputPath": "$",
             "ResultPath": "$.crawl_result",
@@ -33,7 +33,7 @@
         },
         "SeoAnalysis": {
             "Type": "Task",
-            "Resource": "${SEOAnalyzerFunctionArn}",
+            "Resource": "${SEOAnalyzerLambda}",
             "Comment": "Step 2: Run technical SEO audit on crawled data",
             "InputPath": "$",
             "ResultPath": "$.seo_result",
@@ -68,7 +68,7 @@
                     "States": {
                         "AeoAnalysis": {
                             "Type": "Task",
-                            "Resource": "${AEOAnalyzerFunctionArn}",
+                            "Resource": "${AEOAnalyzerLambda}",
                             "Comment": "AEO: Answer Engine Optimization analysis using DeepSeek LLM",
                             "InputPath": "$",
                             "TimeoutSeconds": 180,
@@ -91,7 +91,7 @@
                     "States": {
                         "GeoAnalysis": {
                             "Type": "Task",
-                            "Resource": "${GEOAnalyzerFunctionArn}",
+                            "Resource": "${GEOAnalyzerLambda}",
                             "Comment": "GEO: Generative Engine Optimization analysis using DeepSeek + DuckDuckGo",
                             "InputPath": "$",
                             "TimeoutSeconds": 180,
@@ -114,7 +114,7 @@
                     "States": {
                         "CompetitorAnalysis": {
                             "Type": "Task",
-                            "Resource": "${CompetitorAnalyzerFunctionArn}",
+                            "Resource": "${CompetitorAnalyzerLambda}",
                             "Comment": "Competitor analysis using DuckDuckGo + DeepSeek",
                             "InputPath": "$",
                             "TimeoutSeconds": 120,
@@ -147,7 +147,7 @@
         },
         "FinalScoring": {
             "Type": "Task",
-            "Resource": "${ScoringSEOAEOGEOFunctionArn}",
+            "Resource": "${ScoringLambda}",
             "Comment": "Step 4: Aggregate all results, compute final scores, save report, and send completion WebSocket update",
             "InputPath": "$",
             "ResultPath": "$.final_result",
