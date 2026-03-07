@@ -77,10 +77,13 @@ Resources:
       MemorySize: 512
       Description: handles SEOAEOGEO analyzer
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Layers:
+        - !ImportValue OpenAILibrariesLayerArn
       Environment:
         Variables:
           USERS_TABLE: !ImportValue Xlya-UsersTableName
           SEOAEOGEOANALYZERTABLE: !ImportValue Xlya-SEOAEOGEOAnalyzerTableName
+          DEEPSEEK_API_KEY: "{{resolve:secretsmanager:Xlya-Dev:SecretString:DEEPSEEK_API_KEY}}"
 
   GEOAnalyzerFunction:
     Type: AWS::Serverless::Function
@@ -94,10 +97,13 @@ Resources:
       MemorySize: 512
       Description: handles SEOAEOGEO analyzer
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Layers:
+        - !ImportValue OpenAILibrariesLayerArn
       Environment:
         Variables:
           USERS_TABLE: !ImportValue Xlya-UsersTableName
           SEOAEOGEOANALYZERTABLE: !ImportValue Xlya-SEOAEOGEOAnalyzerTableName
+          DEEPSEEK_API_KEY: "{{resolve:secretsmanager:Xlya-Dev:SecretString:DEEPSEEK_API_KEY}}"
 
   CompetitorAnalyzerFunction:
     Type: AWS::Serverless::Function
@@ -111,10 +117,13 @@ Resources:
       MemorySize: 512
       Description: handles SEOAEOGEO analyzer
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Layers:
+        - !ImportValue OpenAILibrariesLayerArn
       Environment:
         Variables:
           USERS_TABLE: !ImportValue Xlya-UsersTableName
           SEOAEOGEOANALYZERTABLE: !ImportValue Xlya-SEOAEOGEOAnalyzerTableName
+          DEEPSEEK_API_KEY: "{{resolve:secretsmanager:Xlya-Dev:SecretString:DEEPSEEK_API_KEY}}"
 
   ScoringSEOAEOGEOFunction:
     Type: AWS::Serverless::Function
@@ -128,10 +137,13 @@ Resources:
       MemorySize: 512
       Description: handles SEOAEOGEO scoring
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Layers:
+        - !ImportValue OpenAILibrariesLayerArn
       Environment:
         Variables:
           USERS_TABLE: !ImportValue Xlya-UsersTableName
           SEOAEOGEOANALYZERTABLE: !ImportValue Xlya-SEOAEOGEOAnalyzerTableName
+          DEEPSEEK_API_KEY: "{{resolve:secretsmanager:Xlya-Dev:SecretString:DEEPSEEK_API_KEY}}"
 
 Outputs:
   OrchestratorSEOAEOGEOFunctionArn:

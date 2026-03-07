@@ -23,6 +23,16 @@ Resources:
         - python3.13
       RetentionPolicy: Delete
 
+  OpenAILibrariesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: openai-layer
+      Description: Shared dependencies for Google login, requests, cachecontrol, etc.
+      ContentUri: openai-layer.zip
+      CompatibleRuntimes:
+        - python3.13
+      RetentionPolicy: Delete
+
 Outputs:
   IntelligentLibrariesLayerArn:
     Description: ARN of the Google Libraries Layer
@@ -35,3 +45,9 @@ Outputs:
     Value: !Ref CrawlerLibrariesLayer
     Export:
       Name: CrawlerLibrariesLayerArn
+
+  OpenAILibrariesLayerArn:
+    Description: ARN of the Google Libraries Layer
+    Value: !Ref OpenAILibrariesLayer
+    Export:
+      Name: OpenAILibrariesLayerArn
