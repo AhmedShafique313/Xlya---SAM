@@ -38,6 +38,8 @@ Resources:
       MemorySize: 512
       Description: handles SEOAEOGEO Crawler
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Layers:
+        - !ImportValue CrawlerLibrariesLayerArn
       Environment:
         Variables:
           USERS_TABLE: !ImportValue Xlya-UsersTableName

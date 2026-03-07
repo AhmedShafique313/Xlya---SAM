@@ -13,9 +13,25 @@ Resources:
         - python3.13
       RetentionPolicy: Delete
 
+  CrawlerLibrariesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: firecrawl-layer
+      Description: Shared dependencies for Google login, requests, cachecontrol, etc.
+      ContentUri: firecrawl-layer.zip
+      CompatibleRuntimes:
+        - python3.13
+      RetentionPolicy: Delete
+
 Outputs:
   IntelligentLibrariesLayerArn:
     Description: ARN of the Google Libraries Layer
     Value: !Ref IntelligentLibrariesLayer
     Export:
       Name: IntelligentLibrariesLayerArn
+
+  CrawlerLibrariesLayerArn:
+    Description: ARN of the Google Libraries Layer
+    Value: !Ref CrawlerLibrariesLayer
+    Export:
+      Name: CrawlerLibrariesLayerArn
