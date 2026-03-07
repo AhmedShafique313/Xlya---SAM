@@ -1,0 +1,62 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS serverless application with a Step Functions.
+
+Resources:
+  StateMachineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - states.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+
+  StateMachinePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: XlyaStepFunctionsPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - lambda:InvokeFunction
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - states:StartExecution
+              - states:StopExecution
+              - states:DescribeExecution
+              - states:ListExecutions
+            Resource: "*"
+      Roles:
+        - !Ref StateMachineRole
+
+  SeoAeoGeoStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Name: seo-aeo-geo-SM
+      Role: !GetAtt StateMachineRole.Arn
+      DefinitionUri: statemachine/definition.asl.json
+      DefinitionSubstitutions:
+        CrawlerLambda: !ImportValue CrawlerFunctionArn
+        SEOAnalyzerLambda: !ImportValue SEOAnalyzerFunctionArn
+        AEOAnalyzerLambda: !ImportValue AEOAnalyzerFunctionArn
+        GEOAnalyzerLambda: !ImportValue GEOAnalyzerFunctionArn
+        CompetitorAnalyzerLambda: !ImportValue CompetitorAnalyzerFunctionArn
+        ScoringLambda: !ImportValue ScoringSEOAEOGEOFunctionArn
+      Tracing:
+        Enabled: true
+
+Outputs:
+  SeoAeoGeoStateMachineArn:
+    Description: ARN of the Step Functions state machine for SEO AEO GEO Analysis
+    Value: !Ref SeoAeoGeoStateMachine
+    Export:
+      Name: SeoAeoGeoStateMachineArn

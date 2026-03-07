@@ -85,6 +85,11 @@ Resources:
     Properties:
       Location: s3/template.yaml
 
+  StateMachinesFeature:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: functions/template.yaml
+
 Outputs:
   IAMStackOutput:
     Description: Outputs from IAM stack
@@ -129,3 +134,7 @@ Outputs:
   S3StackOutput:
     Description: Outputs from S3 stack
     Value: !Ref S3Stack
+
+  StateMachinesFeatureOutput:
+    Description: Outputs from state machine functions
+    Value: !Ref StateMachinesFeature

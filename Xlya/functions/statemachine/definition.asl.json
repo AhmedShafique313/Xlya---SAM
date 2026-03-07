@@ -1,0 +1,168 @@
+{
+    "Comment": "XYLA INSIGHTS — Analysis Pipeline State Machine. Orchestrates website crawling, SEO/AEO/GEO analysis, competitor analysis, and final scoring sequentially. Each step sends real-time WebSocket progress updates.",
+    "StartAt": "CrawlWebsite",
+    "States": {
+        "CrawlWebsite": {
+            "Type": "Task",
+            "Resource": "${CrawlerFunctionArn}",
+            "Comment": "Step 1: Crawl the target website using Firecrawl API",
+            "InputPath": "$",
+            "ResultPath": "$.crawl_result",
+            "TimeoutSeconds": 120,
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "States.TaskFailed",
+                        "Lambda.ServiceException"
+                    ],
+                    "IntervalSeconds": 5,
+                    "MaxAttempts": 2,
+                    "BackoffRate": 2.0
+                }
+            ],
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "ResultPath": "$.crawl_error",
+                    "Next": "SeoAnalysis"
+                }
+            ],
+            "Next": "SeoAnalysis"
+        },
+        "SeoAnalysis": {
+            "Type": "Task",
+            "Resource": "${SEOAnalyzerFunctionArn}",
+            "Comment": "Step 2: Run technical SEO audit on crawled data",
+            "InputPath": "$",
+            "ResultPath": "$.seo_result",
+            "TimeoutSeconds": 60,
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "States.TaskFailed"
+                    ],
+                    "IntervalSeconds": 3,
+                    "MaxAttempts": 1,
+                    "BackoffRate": 1.5
+                }
+            ],
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "ResultPath": "$.seo_error",
+                    "Next": "ParallelAiAnalysis"
+                }
+            ],
+            "Next": "ParallelAiAnalysis"
+        },
+        "ParallelAiAnalysis": {
+            "Type": "Parallel",
+            "Comment": "Step 3: Run AEO, GEO, and Competitor analysis in parallel for speed",
+            "Branches": [
+                {
+                    "StartAt": "AeoAnalysis",
+                    "States": {
+                        "AeoAnalysis": {
+                            "Type": "Task",
+                            "Resource": "${AEOAnalyzerFunctionArn}",
+                            "Comment": "AEO: Answer Engine Optimization analysis using DeepSeek LLM",
+                            "InputPath": "$",
+                            "TimeoutSeconds": 180,
+                            "Retry": [
+                                {
+                                    "ErrorEquals": [
+                                        "States.TaskFailed"
+                                    ],
+                                    "IntervalSeconds": 5,
+                                    "MaxAttempts": 2,
+                                    "BackoffRate": 2.0
+                                }
+                            ],
+                            "End": true
+                        }
+                    }
+                },
+                {
+                    "StartAt": "GeoAnalysis",
+                    "States": {
+                        "GeoAnalysis": {
+                            "Type": "Task",
+                            "Resource": "${GEOAnalyzerFunctionArn}",
+                            "Comment": "GEO: Generative Engine Optimization analysis using DeepSeek + DuckDuckGo",
+                            "InputPath": "$",
+                            "TimeoutSeconds": 180,
+                            "Retry": [
+                                {
+                                    "ErrorEquals": [
+                                        "States.TaskFailed"
+                                    ],
+                                    "IntervalSeconds": 5,
+                                    "MaxAttempts": 2,
+                                    "BackoffRate": 2.0
+                                }
+                            ],
+                            "End": true
+                        }
+                    }
+                },
+                {
+                    "StartAt": "CompetitorAnalysis",
+                    "States": {
+                        "CompetitorAnalysis": {
+                            "Type": "Task",
+                            "Resource": "${CompetitorAnalyzerFunctionArn}",
+                            "Comment": "Competitor analysis using DuckDuckGo + DeepSeek",
+                            "InputPath": "$",
+                            "TimeoutSeconds": 120,
+                            "Retry": [
+                                {
+                                    "ErrorEquals": [
+                                        "States.TaskFailed"
+                                    ],
+                                    "IntervalSeconds": 5,
+                                    "MaxAttempts": 2,
+                                    "BackoffRate": 2.0
+                                }
+                            ],
+                            "End": true
+                        }
+                    }
+                }
+            ],
+            "ResultPath": "$.parallel_results",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "ResultPath": "$.parallel_error",
+                    "Next": "FinalScoring"
+                }
+            ],
+            "Next": "FinalScoring"
+        },
+        "FinalScoring": {
+            "Type": "Task",
+            "Resource": "${ScoringSEOAEOGEOFunctionArn}",
+            "Comment": "Step 4: Aggregate all results, compute final scores, save report, and send completion WebSocket update",
+            "InputPath": "$",
+            "ResultPath": "$.final_result",
+            "TimeoutSeconds": 60,
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "States.TaskFailed"
+                    ],
+                    "IntervalSeconds": 3,
+                    "MaxAttempts": 1,
+                    "BackoffRate": 1.5
+                }
+            ],
+            "End": true
+        }
+    }
+}
