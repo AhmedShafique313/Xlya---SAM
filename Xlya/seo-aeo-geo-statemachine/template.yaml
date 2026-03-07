@@ -44,6 +44,9 @@ Resources:
         Variables:
           USERS_TABLE: !ImportValue Xlya-UsersTableName
           SEOAEOGEOANALYZERTABLE: !ImportValue Xlya-SEOAEOGEOAnalyzerTableName
+          S3_BUCKET: "{{resolve:secretsmanager:Xlya-Dev:SecretString:S3_BUCKET}}"
+          STATE_MACHINE_ARN: "{{resolve:secretsmanager:Xlya-Dev:SecretString:STATE_MACHINE_ARN}}"
+          FIRECRAWL_API_KEY: "{{resolve:secretsmanager:Xlya-Dev:SecretString:FIRECRAWL_API_KEY}}"
 
   SEOAnalyzerFunction:
     Type: AWS::Serverless::Function
