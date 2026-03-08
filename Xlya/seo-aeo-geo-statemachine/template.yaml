@@ -79,6 +79,7 @@ Resources:
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
       Layers:
         - !ImportValue OpenAILibrariesLayerArn
+        - !ImportValue DuckLibrariesLayerArn
       Environment:
         Variables:
           USERS_TABLE: !ImportValue Xlya-UsersTableName
@@ -99,6 +100,7 @@ Resources:
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
       Layers:
         - !ImportValue OpenAILibrariesLayerArn
+        - !ImportValue DuckLibrariesLayerArn
       Environment:
         Variables:
           USERS_TABLE: !ImportValue Xlya-UsersTableName
@@ -119,6 +121,7 @@ Resources:
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
       Layers:
         - !ImportValue OpenAILibrariesLayerArn
+        - !ImportValue DuckLibrariesLayerArn
       Environment:
         Variables:
           USERS_TABLE: !ImportValue Xlya-UsersTableName
@@ -139,6 +142,7 @@ Resources:
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
       Layers:
         - !ImportValue OpenAILibrariesLayerArn
+        - !ImportValue DuckLibrariesLayerArn
       Environment:
         Variables:
           USERS_TABLE: !ImportValue Xlya-UsersTableName

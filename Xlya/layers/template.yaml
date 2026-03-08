@@ -33,6 +33,16 @@ Resources:
         - python3.13
       RetentionPolicy: Delete
 
+  DuckLibrariesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: duck-layer
+      Description: Shared dependencies for Google login, requests, cachecontrol, etc.
+      ContentUri: duck-layer.zip
+      CompatibleRuntimes:
+        - python3.13
+      RetentionPolicy: Delete
+
 Outputs:
   IntelligentLibrariesLayerArn:
     Description: ARN of the Google Libraries Layer
@@ -51,3 +61,9 @@ Outputs:
     Value: !Ref OpenAILibrariesLayer
     Export:
       Name: OpenAILibrariesLayerArn
+
+  DuckLibrariesLayerArn:
+    Description: ARN of the Google Libraries Layer
+    Value: !Ref DuckLibrariesLayer
+    Export:
+      Name: DuckLibrariesLayerArn
