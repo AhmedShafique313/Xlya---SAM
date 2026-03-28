@@ -12,7 +12,7 @@ from duckduckgo_search import DDGS
 
 # Initialize Bedrock client
 bedrock_runtime = boto3.client('bedrock-runtime', region_name='us-east-1')
-MODEL_ID = "anthropic.claude-3-haiku-20240307-v1:0"
+MODEL_ID = "openai.gpt-oss-120b-1:0"
 
 
 def lambda_handler(event, context):

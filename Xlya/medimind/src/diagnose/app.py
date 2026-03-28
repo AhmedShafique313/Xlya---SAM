@@ -17,7 +17,7 @@ MEDIMIND_TABLE = os.environ["MEDIMIND_TABLE"]
 S3_BUCKET = os.environ["S3_BUCKET_NAME"]
 
 # Bedrock Model — gpt-oss-120b v1 (on-demand, us-east-1, 128K context)
-MODEL_ID = "gpt-oss-120b"
+MODEL_ID = "openai.gpt-oss-120b-1:0"
 
 # Detectable conditions list for prompt context
 DETECTABLE_CONDITIONS = """

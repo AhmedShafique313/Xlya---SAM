@@ -92,8 +92,8 @@ def _analyze_aeo(crawl_data, brand_name, keywords, industry):
 
     # Model IDs for Claude 3 in us-east-1
     # Use Haiku for better rate limits, fallback to Sonnet if needed
-    PRIMARY_MODEL = 'anthropic.claude-3-haiku-20240307-v1:0'  # Faster, higher limits
-    FALLBACK_MODEL = 'anthropic.claude-3-sonnet-20240229-v1:0'  # More capable, lower limits
+    PRIMARY_MODEL = 'openai.gpt-oss-120b-1:0'
+    FALLBACK_MODEL = 'openai.gpt-oss-120b-1:0'
     
     print(f"[AEO] Using primary Bedrock model: {PRIMARY_MODEL}")
     print(f"[AEO] Fallback model: {FALLBACK_MODEL}")
