@@ -99,6 +99,8 @@ Resources:
       - S3Stack
     Properties:
       Location: medimind/template.yaml
+      Parameters:
+        S3BucketName: !GetAtt S3Stack.Outputs.XlyaBucketName
 
 Outputs:
   IAMStackOutput:
