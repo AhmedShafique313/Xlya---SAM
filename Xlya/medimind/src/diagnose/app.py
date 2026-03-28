@@ -1,14 +1,15 @@
 import os
 import re
+import io
 import json
 import time
 import boto3
+import pdfplumber
 from botocore.exceptions import ClientError
 
 # AWS Clients
 s3_client = boto3.client("s3")
 dynamodb = boto3.resource("dynamodb")
-textract_client = boto3.client("textract")
 bedrock_runtime = boto3.client("bedrock-runtime", region_name="us-east-1")
 
 # Environment Variables
@@ -55,50 +56,26 @@ def cors_response(status_code, body):
 
 
 # ============================================================
-# Extract text from PDF using AWS Textract
+# Extract text from PDF using pdfplumber
 # ============================================================
 def extract_text_from_pdf(bucket, key):
-    print(f"[DIAGNOSE] Starting Textract job for s3://{bucket}/{key}")
+    print(f"[DIAGNOSE] Downloading PDF from s3://{bucket}/{key}")
 
-    response = textract_client.start_document_text_detection(
-        DocumentLocation={"S3Object": {"Bucket": bucket, "Name": key}}
-    )
-    job_id = response["JobId"]
-    print(f"[DIAGNOSE] Textract JobId: {job_id}")
+    response = s3_client.get_object(Bucket=bucket, Key=key)
+    pdf_bytes = response["Body"].read()
+    print(f"[DIAGNOSE] PDF downloaded ({len(pdf_bytes)} bytes)")
 
-    # Poll until complete (max 60 attempts x 5s = 5 minutes)
-    for attempt in range(60):
-        result = textract_client.get_document_text_detection(JobId=job_id)
-        status = result["JobStatus"]
-        print(f"[DIAGNOSE] Textract status: {status} (attempt {attempt + 1})")
-
-        if status == "SUCCEEDED":
-            break
-        elif status == "FAILED":
-            raise Exception(f"Textract job failed for key: {key}")
-
-        time.sleep(5)
-    else:
-        raise Exception("Textract job timed out after 5 minutes")
-
-    # Collect all text blocks with pagination
     text_lines = []
-    for block in result.get("Blocks", []):
-        if block["BlockType"] == "LINE":
-            text_lines.append(block["Text"])
 
-    next_token = result.get("NextToken")
-    while next_token:
-        result = textract_client.get_document_text_detection(
-            JobId=job_id, NextToken=next_token
-        )
-        for block in result.get("Blocks", []):
-            if block["BlockType"] == "LINE":
-                text_lines.append(block["Text"])
-        next_token = result.get("NextToken")
+    with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+        for page_num, page in enumerate(pdf.pages):
+            page_text = page.extract_text()
+            if page_text:
+                text_lines.append(page_text)
+                print(f"[DIAGNOSE] Page {page_num + 1}: extracted {len(page_text)} chars")
 
     extracted_text = "\n".join(text_lines)
-    print(f"[DIAGNOSE] Extracted {len(text_lines)} lines of text from PDF")
+    print(f"[DIAGNOSE] Total extracted: {len(extracted_text)} chars")
     return extracted_text
 
 

@@ -43,6 +43,7 @@ Resources:
       Layers:
         - !ImportValue OpenAILibrariesLayerArn
         - !ImportValue DuckLibrariesLayerArn
+        - !ImportValue PDFLibrariesLayerArn
       Environment:
         Variables:
           MEDIMIND_TABLE: !ImportValue Xlya-MediMindTableName

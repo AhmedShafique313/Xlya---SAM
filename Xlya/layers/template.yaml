@@ -43,6 +43,16 @@ Resources:
         - python3.13
       RetentionPolicy: Delete
 
+  PDFLibrariesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: pdf-layer
+      Description: Shared dependencies for PDF text extraction using pdfplumber.
+      ContentUri: pdf-layer.zip
+      CompatibleRuntimes:
+        - python3.13
+      RetentionPolicy: Delete
+
 Outputs:
   IntelligentLibrariesLayerArn:
     Description: ARN of the Google Libraries Layer
@@ -67,3 +77,9 @@ Outputs:
     Value: !Ref DuckLibrariesLayer
     Export:
       Name: DuckLibrariesLayerArn
+
+  PDFLibrariesLayerArn:
+    Description: ARN of the PDF Libraries Layer
+    Value: !Ref PDFLibrariesLayer
+    Export:
+      Name: PDFLibrariesLayerArn
