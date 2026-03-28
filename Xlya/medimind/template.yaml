@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: MediMind feature for Xlya - handles medical report upload, diagnosis, report download, and records
+
+Resources:
+  ReportUploadFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: report-upload
+      Handler: app.lambda_handler
+      CodeUri: src/report_upload/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 512
+      Description: Handles medical report uploads for MediMind
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+
+  DiagnoseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: diagnose
+      Handler: app.lambda_handler
+      CodeUri: src/diagnose/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 512
+      Description: Handles AI-based diagnosis for MediMind
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+
+  DownloadReportFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: download-report
+      Handler: app.lambda_handler
+      CodeUri: src/download_report/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 512
+      Description: Handles report download for MediMind
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+
+  MediMindRecordFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: medimind-record
+      Handler: app.lambda_handler
+      CodeUri: src/medimind_record/
+      Runtime: python3.13
+      Tracing: Active
+      Timeout: 900
+      MemorySize: 512
+      Description: Handles MediMind records management
+      Role: !ImportValue Xlya-LambdaExecutionRoleArn
+
+Outputs:
+  ReportUploadFunctionArn:
+    Description: "Arn of report upload Function"
+    Value: !GetAtt ReportUploadFunction.Arn
+    Export:
+      Name: ReportUploadFunctionArn
+
+  DiagnoseFunctionArn:
+    Description: "Arn of diagnose Function"
+    Value: !GetAtt DiagnoseFunction.Arn
+    Export:
+      Name: DiagnoseFunctionArn
+
+  DownloadReportFunctionArn:
+    Description: "Arn of download report Function"
+    Value: !GetAtt DownloadReportFunction.Arn
+    Export:
+      Name: DownloadReportFunctionArn
+
+  MediMindRecordFunctionArn:
+    Description: "Arn of MediMind record Function"
+    Value: !GetAtt MediMindRecordFunction.Arn
+    Export:
+      Name: MediMindRecordFunctionArn

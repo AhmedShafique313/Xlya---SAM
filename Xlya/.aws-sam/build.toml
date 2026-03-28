@@ -108,4 +108,40 @@ manifest_hash = ""
 packagetype = "Zip"
 functions = ["SEOAEOGEOFeature/ScoringSEOAEOGEOFunction"]
 
+[function_build_definitions.5f966c6b-a135-442c-bed9-99f8adf9afd1]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\medimind\\src\\report_upload"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["MediMindFeature/ReportUploadFunction"]
+
+[function_build_definitions.adc85f37-ff3c-49a9-9f04-1ef54719560c]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\medimind\\src\\diagnose"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["MediMindFeature/DiagnoseFunction"]
+
+[function_build_definitions.bc1e3b18-b090-4a53-b1c9-fabdc89e26ca]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\medimind\\src\\download_report"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["MediMindFeature/DownloadReportFunction"]
+
+[function_build_definitions.30de69be-f156-4b6f-8541-0e0227d14a9b]
+codeuri = "C:\\Users\\Islams Dream\\Documents\\projects\\Xlya---SAM\\Xlya\\medimind\\src\\medimind_record"
+runtime = "python3.13"
+architecture = "x86_64"
+handler = "app.lambda_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["MediMindFeature/MediMindRecordFunction"]
+
 [layer_build_definitions]

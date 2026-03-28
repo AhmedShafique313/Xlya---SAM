@@ -90,6 +90,14 @@ Resources:
     Properties:
       Location: functions/template.yaml
 
+  MediMindFeature:
+    Type: AWS::Serverless::Application
+    DependsOn:
+      - IAMStack
+      - DynamoDBStack
+    Properties:
+      Location: medimind/template.yaml
+
 Outputs:
   IAMStackOutput:
     Description: Outputs from IAM stack
@@ -138,3 +146,7 @@ Outputs:
   StateMachinesFeatureOutput:
     Description: Outputs from state machine functions
     Value: !Ref StateMachinesFeature
+
+  MediMindFeatureOutput:
+    Description: Outputs from MediMind Feature
+    Value: !Ref MediMindFeature
