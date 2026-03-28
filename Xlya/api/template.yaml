@@ -14,6 +14,7 @@ Resources:
       - Onboarding
       - Profile
       - Dashboard
+      - MediMind
     Properties:
       RestApiId: !Ref xlya
 
@@ -98,6 +99,14 @@ Resources:
     Type: AWS::Serverless::Application
     Properties:
       Location: dashboard.yaml
+      Parameters:
+        RootResourceId: !GetAtt xlya.RootResourceId
+        RestApiId: !Ref xlya
+
+  MediMind:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: medimind.yaml
       Parameters:
         RootResourceId: !GetAtt xlya.RootResourceId
         RestApiId: !Ref xlya
