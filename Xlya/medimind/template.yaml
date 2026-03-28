@@ -2,6 +2,11 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: MediMind feature for Xlya - handles medical report upload, diagnosis, report download, and records
 
+Parameters:
+  S3BucketName:
+    Type: String
+    Description: S3 bucket name imported from parent stack
+
 Resources:
   ReportUploadFunction:
     Type: AWS::Serverless::Function
@@ -15,6 +20,13 @@ Resources:
       MemorySize: 512
       Description: Handles medical report uploads for MediMind
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Layers:
+        - !ImportValue OpenAILibrariesLayerArn
+        - !ImportValue DuckLibrariesLayerArn
+      Environment:
+        Variables:
+          MEDIMIND_TABLE: !ImportValue Xlya-MediMindTableName
+          S3_BUCKET_NAME: !Ref S3BucketName
 
   DiagnoseFunction:
     Type: AWS::Serverless::Function
@@ -28,7 +40,13 @@ Resources:
       MemorySize: 512
       Description: Handles AI-based diagnosis for MediMind
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
-
+      Layers:
+        - !ImportValue OpenAILibrariesLayerArn
+        - !ImportValue DuckLibrariesLayerArn
+      Environment:
+        Variables:
+          MEDIMIND_TABLE: !ImportValue Xlya-MediMindTableName
+          S3_BUCKET_NAME: !Ref S3BucketName
   DownloadReportFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -41,6 +59,13 @@ Resources:
       MemorySize: 512
       Description: Handles report download for MediMind
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Layers:
+        - !ImportValue OpenAILibrariesLayerArn
+        - !ImportValue DuckLibrariesLayerArn
+      Environment:
+        Variables:
+          MEDIMIND_TABLE: !ImportValue Xlya-MediMindTableName
+          S3_BUCKET_NAME: !Ref S3BucketName
 
   MediMindRecordFunction:
     Type: AWS::Serverless::Function
@@ -54,6 +79,13 @@ Resources:
       MemorySize: 512
       Description: Handles MediMind records management
       Role: !ImportValue Xlya-LambdaExecutionRoleArn
+      Layers:
+        - !ImportValue OpenAILibrariesLayerArn
+        - !ImportValue DuckLibrariesLayerArn
+      Environment:
+        Variables:
+          MEDIMIND_TABLE: !ImportValue Xlya-MediMindTableName
+          S3_BUCKET_NAME: !Ref S3BucketName
 
 Outputs:
   ReportUploadFunctionArn:
