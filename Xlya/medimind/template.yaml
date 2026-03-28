@@ -47,6 +47,7 @@ Resources:
         Variables:
           MEDIMIND_TABLE: !ImportValue Xlya-MediMindTableName
           S3_BUCKET_NAME: !Ref S3BucketName
+          
   DownloadReportFunction:
     Type: AWS::Serverless::Function
     Properties:

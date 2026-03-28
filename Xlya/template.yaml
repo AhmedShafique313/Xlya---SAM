@@ -95,6 +95,8 @@ Resources:
     DependsOn:
       - IAMStack
       - DynamoDBStack
+      - LayersStack
+      - S3Stack
     Properties:
       Location: medimind/template.yaml
 
